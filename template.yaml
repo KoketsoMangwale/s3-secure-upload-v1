@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Secure Token-Based File Upload System (SAM)
+
+Globals:
+  Function:
+    Runtime: python3.11
+    Timeout: 10
+    MemorySize: 128
+
+Resources:
+  GenerateTokenFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: generate_token.lambda_handler
+      CodeUri: src/
+      Events:
+        GenerateTokenAPI:
+          Type: Api
+          Properties:
+            Path: /generate-token
+            Method: post
+      Environment:
+        Variables:
+          TABLE_NAME: SecureUploadTokens
+
+  PresignedURLFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: get_presigned_url.lambda_handler
+      CodeUri: src/
+      Events:
+        PresignedAPI:
+          Type: Api
+          Properties:
+            Path: /upload-url/{token}
+            Method: get
+      Environment:
+        Variables:
+          S3_BUCKET: secure-upload-bucket
+          TABLE_NAME: SecureUploadTokens
+
+  ConfirmUploadFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: confirm_upload.lambda_handler
+      CodeUri: src/
+      Events:
+        ConfirmAPI:
+          Type: Api
+          Properties:
+            Path: /upload/confirm/{token}
+            Method: post
+      Environment:
+        Variables:
+          S3_BUCKET: secure-upload-bucket
+          TOKEN_TABLE: SecureUploadTokens
+          LOG_TABLE: SecureUploadLogs
+
+  SecureUploadTokens:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SecureUploadTokens
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: token
+          AttributeType: S
+      KeySchema:
+        - AttributeName: token
+          KeyType: HASH
+
+  SecureUploadLogs:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: SecureUploadLogs
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+
+  UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: secure-upload-bucket
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
