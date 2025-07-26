@@ -37,7 +37,7 @@ Resources:
             Method: get
       Environment:
         Variables:
-          S3_BUCKET: secure-upload-bucket
+          S3_BUCKET: secure-upload-bucket-kbm
           TABLE_NAME: SecureUploadTokens
 
   ConfirmUploadFunction:
@@ -53,7 +53,7 @@ Resources:
             Method: post
       Environment:
         Variables:
-          S3_BUCKET: secure-upload-bucket
+          S3_BUCKET: secure-upload-bucket-kbm
           TOKEN_TABLE: SecureUploadTokens
           LOG_TABLE: SecureUploadLogs
 
@@ -84,7 +84,7 @@ Resources:
   UploadBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: secure-upload-bucket
+      BucketName: secure-upload-bucket-kbm
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
