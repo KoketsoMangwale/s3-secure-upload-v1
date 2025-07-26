@@ -6,7 +6,7 @@ import os
 dynamodb = boto3.resource('dynamodb')
 token_table = dynamodb.Table('SecureUploadTokens')
 
-s3 = boto3.client('s3')
+s3 = boto3.client('s3', region_name='af-south-1', endpoint_url='https://s3.af-south-1.amazonaws.com')
 S3_BUCKET = os.environ.get('S3_BUCKET')
 
 def lambda_handler(event, context):
