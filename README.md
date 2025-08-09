@@ -36,7 +36,7 @@ secure-upload/
 │   ├── generate_token.py        # Generate upload tokens
 │   ├── get_presigned_url.py     # Get signed S3 upload URLs
 │   └── confirm_upload.py        # Log file metadata after upload
-├── serverless.yml               # Serverless deployment config
+├── template.yml               # Serverless deployment config
 ├── requirements.txt             # Python dependencies
 └── README.md
 
