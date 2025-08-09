@@ -99,30 +99,66 @@ secure-upload/
 ### 1. Generate Upload Token
 
 ```
-POST /generate-token
-Body: { "client_id": "ABC123" }
-Response: { "token": "RX8G73KL", "upload_url": "/upload-url/RX8G73KL" }
+curl -X POST https://xxxxxxxxxx.execute-api.us-west-2.amazonaws.com/Prod/generate-token \
+  -H "Content-Type: application/json" \
+  -d '{"client_id": "ABC123"}'
 ```
 
+```
+Response:
+{
+"token": "224DB687",
+"upload_url": "/upload-url/224DB687",
+"expires_at": "2025-08-12T15:25:46.203808"
+}
+```
 ---
 
+s3-secure-uploadPresignedURL Policy (executionRole)
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:dynamodb:af-south-1:XXXXXXXXXXXX:table/SecureUploadTokens",
+                "arn:aws:dynamodb:us-west-2:XXXXXXXXXXXX:table/SecureUploadLogs"
+                "arn:aws:s3:::secure-upload-bucket-kbm/*"
+            ]
+        }
+    ]
+}
+```
+
 ### 2. Get Presigned Upload URL
+From the response in step 1. Replace the token in the endpoint below
+```
+curl https://mhiinugqqd.execute-api.us-west-2.amazonaws.com/Prod/upload-url/{token}
+```
+Response:
 
 ```
-GET /upload-url/{token}?ext=pdf&contentType=application/pdf
-Returns: { upload_url, filename, content_type }
+(
+"upload_url": `Presigned URL`
+"filename": "3cfa01a2bbab42249161187fd18a7047.bin", 
+"key": "uploads/3cfa01a2bbab42249161187fd18a7047.bin", 
+"content_type": "application/octet-stream"
+}
 ```
-
 ---
 
 ### 3. Upload File (Client uses returned URL)
+Using the `Presigned URL` from the response of the previous GET request, go to a browser, paste the URL 
+```
+curl -X PUT -H "Content-Type: application/octet-stream" -T myfile.txt `Presigned URL`
 
-```js
-await fetch(upload_url, {
-  method: 'PUT',
-  headers: { 'Content-Type': content_type },
-  body: fileBlob
-});
 ```
 
 ---
@@ -130,9 +166,13 @@ await fetch(upload_url, {
 ### 4. Confirm Upload
 
 ```
-POST /upload/confirm/{token}
-Body: { "filename": "abc123.pdf", "content_type": "application/pdf" }
+curl -X POST https://mhiinugqqd.execute-api.us-west-2.amazonaws.com/Prod/upload/confirm/224DB687 \
+-H "Content-Type: application/json" \
+-d '{"filename": "3cfa01a2bbab42249161187fd18a7047.bin", "content_type": "application/octet-stream"}'
 ```
+Response:
+
+`{"message": "Upload confirmed"}`
 
 ---
 
