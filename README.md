@@ -63,8 +63,8 @@ secure-upload/
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/secure-upload.git
-   cd secure-upload
+   git clone https://github.com/your-username/secure-upload-v1.git
+   cd secure-upload-v1
    ```
 
 2. Install Python dependencies:
@@ -76,7 +76,8 @@ secure-upload/
 3. Deploy with Serverless:
 
    ```bash
-   sls deploy --stage dev
+   sam build
+   sam deploy -guided
    ```
 
 ---
