@@ -140,15 +140,15 @@ s3-secure-uploadPresignedURL Policy (executionRole)
 ### 2. Get Presigned Upload URL
 From the response in step 1. Replace the token in the endpoint below
 ```
-curl https://mhiinugqqd.execute-api.us-west-2.amazonaws.com/Prod/upload-url/{token}
+curl https://xxxxxxxxx.execute-api.us-west-2.amazonaws.com/Prod/upload-url/{token}?ext={file_extention}
 ```
 Response:
 
 ```
 (
 "upload_url": `Presigned URL`
-"filename": "3cfa01a2bbab42249161187fd18a7047.bin", 
-"key": "uploads/3cfa01a2bbab42249161187fd18a7047.bin", 
+"filename": "e8006b5b87914dfca7f89706eb03bb72.txt", 
+"key": "uploads/e8006b5b87914dfca7f89706eb03bb72.txt", 
 "content_type": "application/octet-stream"
 }
 ```
@@ -157,7 +157,7 @@ Response:
 ### 3. Upload File (Client uses returned URL)
 Using the `Presigned URL` from the response of the previous GET request, go to a browser, paste the URL 
 ```
-curl -X PUT -H "Content-Type: application/octet-stream" -T myfile.txt `Presigned URL`
+curl -X PUT -H "Content-Type: application/octet-stream" -T e8006b5b87914dfca7f89706eb03bb72.txt `Presigned URL`
 
 ```
 
@@ -166,9 +166,9 @@ curl -X PUT -H "Content-Type: application/octet-stream" -T myfile.txt `Presigned
 ### 4. Confirm Upload
 
 ```
-curl -X POST https://mhiinugqqd.execute-api.us-west-2.amazonaws.com/Prod/upload/confirm/224DB687 \
+curl -X POST https://xxxxxxxxx.execute-api.us-west-2.amazonaws.com/Prod/upload/confirm/224DB687 \
 -H "Content-Type: application/json" \
--d '{"filename": "3cfa01a2bbab42249161187fd18a7047.bin", "content_type": "application/octet-stream"}'
+-d '{"filename": "e8006b5b87914dfca7f89706eb03bb72.txt", "content_type": "application/txt"}'
 ```
 Response:
 
