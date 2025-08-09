@@ -57,14 +57,15 @@ secure-upload/
 ```
 
 ---
-
+> __Please note that the name of S3 bucket must be unique, otherwise the deployment of the stack (template) will fail.__
+---
 ### Setup
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/secure-upload-v1.git
-   cd secure-upload-v1
+   git clone https://github.com/your-username/s3-secure-upload-v1.git
+   cd s3-secure-upload-v1
    ```
 
 2. Install Python dependencies:
@@ -77,9 +78,20 @@ secure-upload/
 
    ```bash
    sam build
-   sam deploy -guided
+   sam deploy --guided
    ```
-
+* Stack Name: `sam-s3-secure-upload`
+* AWS Region: e.g. `us-west-2`
+* Confirm changes before deploy [y/N]: N
+* Allow SAM CLI IAM role creation [Y/n]: Y
+* Disable rollback [y/N]: N
+* GenerateTokenFunction has no authentication. Is this okay? [y/N]: y
+* PresignedURLFunction has no authentication. Is this okay? [y/N]: y
+* ConfirmUploadFunction has no authentication. Is this okay? [y/N]: y
+* Save arguments to configuration file [Y/n]: Y
+* SAM configuration file [samconfig.toml]: samconfig.toml
+* SAM configuration environment [default]: default
+  
 ---
 
 ## 🧪 API Endpoints
