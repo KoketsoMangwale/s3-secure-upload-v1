@@ -40,4 +40,6 @@ To get started, you'll need Node.js, npm, Python 3.11+, and the AWS CLI configur
 ### Future Enhancements:
 - Optional Email Notification: The system could be enhanced to send optional email notifications, possibly using Amazon SES
 - Expiring Upload Tokens: The tokens could be configured to expire automatically using DynamoDB's Time to Live (TTL) feature
-- 
+- NFT-Based Access Tokens: Instead of simple string tokens, issue an ERC-721 (NFT) or ERC-1155 token as the upload key
+  - The NFT metadata can link to the presigned S3 URL request endpoint.
+  - NFT ownership transfers could allow delegation of upload rights without sharing credentials
