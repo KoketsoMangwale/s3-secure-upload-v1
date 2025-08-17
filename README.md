@@ -32,7 +32,7 @@ This project is a fully serverless, token-based file upload system built on AWS.
 ```
 
 secure-upload/
-├── handler/
+├── src/
 │   ├── generate_token.py        # Generate upload tokens
 │   ├── get_presigned_url.py     # Get signed S3 upload URLs
 │   └── confirm_upload.py        # Log file metadata after upload
