@@ -197,7 +197,7 @@ Response:
 ## 🧑‍💻 Author
 
 **Your Name**
-[LinkedIn](https://www.linkedin.com/in/yourprofile) · [GitHub](https://github.com/your-username)
+[LinkedIn](www.linkedin.com/in/koketso-mangwale-43237065) · [GitHub](https://github.com/KoketsoMangwale)
 
 ---
 
